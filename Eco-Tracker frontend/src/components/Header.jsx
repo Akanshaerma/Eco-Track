@@ -1,78 +1,76 @@
 import React, { useState } from 'react';
 
-const Header = ({ userProfile, onLogout }) => {
+const Header = ({ userProfile, onOpenEditModal }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // Default fallback values agar user profile state abhi pass na ho rahi ho
-  const profile = userProfile || {
-    name: "User Profile",
-    email: "user@ecotrack.com",
-    age: "24",
-    height: "175",
-    weight: "70",
-    bloodGroup: "O+"
-  };
-
   return (
-    <header className="bg-emerald-600 text-white shadow-md px-6 py-4 flex justify-between items-center relative w-full z-50">
-      {/* Left Section: Logo & Title */}
+    <header className="w-full bg-emerald-600 text-white shadow-md px-4 py-3 flex justify-between items-center relative z-40">
+      
+      {/* LEFT COMPONENT: HAMBURGER MENU BUTTON & INDEX LOGO */}
       <div className="flex items-center space-x-3">
-        <span className="text-2xl">🌿</span>
-        <h1 className="text-xl font-bold tracking-wide hidden sm:block">Eco-Health Track</h1>
+        <button 
+          onClick={() => alert("Index Menu Sidebar Triggered!")} 
+          className="p-2 hover:bg-emerald-700 rounded-lg transition focus:outline-none"
+          title="Open Menu"
+        >
+          <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
+            <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
+          </svg>
+        </button>
+        <div className="flex items-center space-x-2">
+          <span className="text-xl">🌿</span>
+          <span className="font-bold tracking-wide text-lg hidden sm:inline-block">Eco-Health Portal</span>
+        </div>
       </div>
 
-      {/* Right Section: Interactive Health Profile Dropdown */}
+      {/* RIGHT COMPONENT: INTEGRATED PROFILE DROPDOWN */}
       <div className="relative">
         <button
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className="flex items-center space-x-2 bg-emerald-700 hover:bg-emerald-800 transition px-4 py-2 rounded-lg font-medium shadow-sm focus:outline-none"
+          className="flex items-center space-x-2 bg-emerald-700 hover:bg-emerald-800 transition px-3 py-1.5 rounded-lg font-medium shadow-inner focus:outline-none text-sm"
         >
           <span>👤</span>
-          <span>{profile.name}</span>
-          <span className={`transform transition-transform duration-200 text-xs ${isDropdownOpen ? 'rotate-180' : 'rotate-0'}`}>
-            ▼
-          </span>
+          <span>{userProfile.name}</span>
+          <span className={`text-[10px] transform transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}>▼</span>
         </button>
 
-        {/* Dropdown Menu Box */}
         {isDropdownOpen && (
-          <div className="absolute right-0 mt-2 w-64 bg-white text-gray-800 rounded-xl shadow-xl border border-gray-100 overflow-hidden animate-fade-in">
-            {/* User Quick Info */}
-            <div className="p-4 bg-gray-50 border-b border-gray-100">
-              <p className="font-semibold text-gray-900 truncate">{profile.name}</p>
-              <p className="text-xs text-gray-500 truncate">{profile.email}</p>
+          <div className="absolute right-0 mt-2 w-64 bg-white text-gray-800 rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50">
+            {/* Quick Status Title */}
+            <div className="p-3 bg-gray-50 border-b border-gray-100">
+              <p className="font-semibold text-xs text-gray-400 uppercase tracking-wider">Active Health Vitals</p>
             </div>
 
-            {/* Live Health Vitals Grid */}
-            <div className="p-4 grid grid-cols-2 gap-3 border-b border-gray-100 bg-white">
-              <div className="bg-emerald-50/50 p-2 rounded-lg border border-emerald-100">
-                <p className="text-[10px] uppercase font-bold text-emerald-700 tracking-wider">Calculated Age</p>
-                <p className="text-sm font-semibold text-gray-800">{profile.age} Yrs</p>
+            {/* Dynamic Core Grid layout */}
+            <div className="p-3 grid grid-cols-2 gap-2 bg-white text-xs">
+              <div className="bg-emerald-50/60 p-2 rounded-lg border border-emerald-100">
+                <span className="text-gray-400 block font-bold uppercase text-[9px]">Calculated Age</span>
+                <span className="font-semibold text-gray-800">{userProfile.age || 'N/A'} Yrs</span>
               </div>
-              <div className="bg-blue-50/50 p-2 rounded-lg border border-blue-100">
-                <p className="text-[10px] uppercase font-bold text-blue-700 tracking-wider">Blood Group</p>
-                <p className="text-sm font-semibold text-gray-800">{profile.bloodGroup}</p>
+              <div className="bg-blue-50/60 p-2 rounded-lg border border-blue-100">
+                <span className="text-gray-400 block font-bold uppercase text-[9px]">Blood Group</span>
+                <span className="font-semibold text-gray-800">{userProfile.bloodGroup || 'N/A'}</span>
               </div>
-              <div className="bg-amber-50/50 p-2 rounded-lg border border-amber-100">
-                <p className="text-[10px] uppercase font-bold text-amber-700 tracking-wider">Height</p>
-                <p className="text-sm font-semibold text-gray-800">{profile.height} cm</p>
+              <div className="bg-amber-50/60 p-2 rounded-lg border border-amber-100">
+                <span className="text-gray-400 block font-bold uppercase text-[9px]">Height (Stature)</span>
+                <span className="font-semibold text-gray-800">{userProfile.height ? `${userProfile.height} cm` : 'N/A'}</span>
               </div>
-              <div className="bg-rose-50/50 p-2 rounded-lg border border-rose-100">
-                <p className="text-[10px] uppercase font-bold text-rose-700 tracking-wider">Weight</p>
-                <p className="text-sm font-semibold text-gray-800">{profile.weight} kg</p>
+              <div className="bg-rose-50/60 p-2 rounded-lg border border-rose-100">
+                <span className="text-gray-400 block font-bold uppercase text-[9px]">Body Weight</span>
+                <span className="font-semibold text-gray-800">{userProfile.weight ? `${userProfile.weight} kg` : 'N/A'}</span>
               </div>
             </div>
 
-            {/* Logout Trigger */}
+            {/* Modal Trigger Trigger Button */}
             <button
               onClick={() => {
                 setIsDropdownOpen(false);
-                if (onLogout) onLogout();
+                onOpenEditModal();
               }}
-              className="w-full text-left px-4 py-3 hover:bg-rose-50 text-rose-600 font-medium transition flex items-center space-x-2"
+              className="w-full text-left px-4 py-2.5 bg-gray-50 hover:bg-emerald-50 text-emerald-600 font-semibold text-xs transition border-t border-gray-100 flex items-center space-x-2"
             >
-              <span>🚪</span>
-              <span>Logout Account</span>
+              <span>⚙️</span>
+              <span>Edit Health Settings</span>
             </button>
           </div>
         )}
