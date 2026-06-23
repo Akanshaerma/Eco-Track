@@ -6,7 +6,7 @@ const API_BASE_URL = 'https://eco-track-3-u27a.onrender.com';
 // ==========================================
 // 1. DYNAMIC NAVIGATION HEADER
 // ==========================================
-const LocalHeader = ({ currentTab, setCurrentTab, userProfile, onOpenEditModal }) => {
+const LocalHeader = ({ currentTab, setCurrentTab, userProfile, onOpenEditModal, onLogout }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
@@ -28,7 +28,7 @@ const LocalHeader = ({ currentTab, setCurrentTab, userProfile, onOpenEditModal }
         <button onClick={() => setCurrentTab('ledger')} className={`px-4 py-2 rounded-lg transition ${currentTab === 'ledger' ? 'bg-emerald-600 text-white shadow' : 'text-emerald-200 hover:text-white'}`}>Database Archives</button>
       </nav>
 
-      <div className="relative">
+      <div className="flex items-center space-x-3 relative">
         <button
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           className="flex items-center space-x-2 bg-emerald-800 hover:bg-emerald-900 transition px-4 py-2 rounded-xl font-bold border border-emerald-600 shadow-md text-sm"
@@ -39,7 +39,7 @@ const LocalHeader = ({ currentTab, setCurrentTab, userProfile, onOpenEditModal }
         </button>
 
         {isDropdownOpen && (
-          <div className="absolute right-0 mt-3 w-72 bg-white text-gray-800 rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
+          <div className="absolute right-0 top-12 mt-1 w-72 bg-white text-gray-800 rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
             <div className="p-4 bg-gray-50 border-b border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-wider">Active Clinical Biometrics</div>
             <div className="p-4 grid grid-cols-2 gap-3 bg-white text-xs font-mono">
               <div className="bg-emerald-50/50 p-2.5 rounded-xl border border-emerald-100">
@@ -66,6 +66,13 @@ const LocalHeader = ({ currentTab, setCurrentTab, userProfile, onOpenEditModal }
               <span>⚙️</span>
               <span>Modify Clinical Parameters</span>
             </button>
+            <button
+              onClick={onLogout}
+              className="w-full text-left px-5 py-3 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs border-t border-rose-200 flex items-center space-x-2"
+            >
+              <span>🚪</span>
+              <span>Terminate Session (Logout)</span>
+            </button>
           </div>
         )}
       </div>
@@ -76,15 +83,17 @@ const LocalHeader = ({ currentTab, setCurrentTab, userProfile, onOpenEditModal }
 const LocalFooter = () => (
   <footer className="w-full bg-gray-950 text-gray-500 py-6 px-6 text-xs border-t border-gray-900 font-mono text-center mt-auto">
     <p className="font-bold text-gray-400 tracking-wide">🔬 Industrial Full-Stack Sustainability Analytics Framework v6.0.0</p>
-    <p className="text-gray-600 text-[10px] mt-1">Multi-View Enterprise System Layout Engaged. © 2026.</p>
+    <p className="text-gray-600 text-[10px] mt-1">Secure Session Managed Gatekeeper Engaged. © 2026.</p>
   </footer>
 );
 
 function App() {
-  const [currentTab, setCurrentTab] = useState('landing');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
+  const [authError, setAuthError] = useState('');
+  
+  const [currentTab, setCurrentTab] = useState('landing');
   const [isLoading, setIsLoading] = useState(false);
   const [filterThreshold, setFilterThreshold] = useState('0');
 
@@ -107,12 +116,35 @@ function App() {
   const [clinicalRiskAssessment, setClinicalRiskAssessment] = useState({ status: "Syncing", color: "text-blue-600 bg-blue-50", desc: "Initializing..." });
 
   useEffect(() => {
-    fetchLogs();
-  }, []);
+    if (isAuthenticated) {
+      fetchLogs();
+    }
+  }, [isAuthenticated]);
 
   useEffect(() => {
-    calculateAdvancedResearchMetrics();
-  }, [logs, user]);
+    if (isAuthenticated) {
+      calculateAdvancedResearchMetrics();
+    }
+  }, [logs, user, isAuthenticated]);
+
+  const handleLoginSubmit = (e) => {
+    e.preventDefault();
+    setAuthError('');
+    // Strict Corporate Verification Matrix Proxy
+    if (authEmail.trim() === 'akansha@ecotrack.com' && authPassword === 'admin123') {
+      setIsAuthenticated(true);
+      setCurrentTab('landing');
+    } else {
+      setAuthError('Invalid Terminal Credentials. Access Denied.');
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setAuthEmail('');
+    setAuthPassword('');
+    setCurrentTab('landing');
+  };
 
   const fetchLogs = async () => {
     setIsLoading(true);
@@ -218,6 +250,72 @@ function App() {
 
   const filteredLogs = logs.filter(log => parseFloat(log.totalCarbon) >= parseFloat(filterThreshold));
 
+  // ==========================================
+  // VIEW: CENTRAL GATEKEEPER LOGIN PORTAL
+  // ==========================================
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex flex-col justify-center items-center p-6 text-slate-100 font-sans selection:bg-emerald-800">
+        <div className="max-w-md w-full bg-slate-800 rounded-3xl p-8 border border-slate-700/60 shadow-2xl space-y-6">
+          <div className="text-center space-y-2">
+            <span className="text-3xl">⚙️</span>
+            <h2 className="text-xl font-black uppercase tracking-wider text-emerald-400">System Core Gateway</h2>
+            <p className="text-xs font-mono text-slate-400">Initialize Encrypted Full-Stack Management Nodes</p>
+          </div>
+
+          {authError && (
+            <div className="p-3 bg-rose-500/10 border border-rose-500/30 rounded-xl text-center text-xs font-mono font-bold text-rose-400 animate-pulse">
+              ❌ {authError}
+            </div>
+          )}
+
+          <form onSubmit={handleLoginSubmit} className="space-y-4 text-xs font-mono">
+            <div>
+              <label className="block text-slate-400 mb-1.5 uppercase text-[9px] tracking-wider">Access Node Link (Email)</label>
+              <input
+                type="email"
+                placeholder="e.g. akansha@ecotrack.com"
+                value={authEmail}
+                onChange={e => setAuthEmail(e.target.value)}
+                className="w-full p-3.5 bg-slate-950/60 border border-slate-700 rounded-xl text-slate-200 focus:outline-none focus:border-emerald-500 transition"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-slate-400 mb-1.5 uppercase text-[9px] tracking-wider">Secret Security Key (Password)</label>
+              <input
+                type="password"
+                placeholder="••••••••"
+                value={authPassword}
+                onChange={e => setAuthPassword(e.target.value)}
+                className="w-full p-3.5 bg-slate-950/60 border border-slate-700 rounded-xl text-slate-200 focus:outline-none focus:border-emerald-500 transition"
+                required
+              />
+            </div>
+
+            <div className="pt-2">
+              <button
+                type="submit"
+                className="w-full p-4 bg-emerald-600 hover:bg-emerald-500 font-bold uppercase text-xs tracking-wider rounded-xl text-white shadow-xl shadow-emerald-950/30 transition"
+              >
+                Initialize System Kernel →
+              </button>
+            </div>
+          </form>
+
+          <div className="bg-slate-950/40 p-3.5 rounded-xl border border-slate-700/40 text-[10px] font-mono text-slate-500 text-center leading-relaxed">
+            <span className="text-emerald-500/70 font-bold">Default Sandbox Gate:</span><br/>
+            Email: <span className="text-slate-300">akansha@ecotrack.com</span> | Password: <span className="text-slate-300">admin123</span>
+          </div>
+        </div>
+        <p className="mt-6 text-[10px] font-mono text-slate-600">Secure Protocol Management. Powered by MongoDB Cloud Instances.</p>
+      </div>
+    );
+  }
+
+  // ==========================================
+  // VIEW: AUTHORIZED LOGGED-IN SUITE AREA
+  // ==========================================
   return (
     <div className="min-h-screen flex flex-col bg-slate-50/50 text-gray-800 font-sans selection:bg-emerald-100 relative">
       
@@ -228,24 +326,25 @@ function App() {
         </div>
       )}
 
-      <LocalHeader currentTab={currentTab} setCurrentTab={setCurrentTab} userProfile={user} onOpenEditModal={() => { setFormData({ ...user }); setIsModalOpen(true); }} />
+      <LocalHeader 
+        currentTab={currentTab} 
+        setCurrentTab={setCurrentTab} 
+        userProfile={user} 
+        onOpenEditModal={() => { setFormData({ ...user }); setIsModalOpen(true); }} 
+        onLogout={handleLogout}
+      />
 
-      {/* ==========================================
-          PAGE 1: NEW SLEEK SAAS LANDING PORTAL
-          ========================================== */}
+      {/* VIEW: HOME PORTAL */}
       {currentTab === 'landing' && (
         <div className="flex-grow max-w-5xl mx-auto w-full p-6 sm:p-16 flex flex-col justify-center items-center text-center space-y-8 animate-fade-in">
           <div className="space-y-4">
             <span className="text-[10px] font-mono font-black tracking-widest uppercase text-emerald-700 bg-emerald-50 px-4 py-1.5 rounded-full border border-emerald-200">Industrial Eco-Informatics Suite</span>
-            
-            {/* NEW BEAUTIFUL GRADIENT TITLE */}
             <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-gray-900 leading-tight">
               Intelligent Carbon Analytics <br/>
               <span className="bg-gradient-to-r from-emerald-600 to-teal-700 bg-clip-text text-transparent font-black">
                 & Real-Time Modeling.
               </span>
             </h1>
-            
             <p className="max-w-2xl text-gray-500 text-xs sm:text-sm font-sans leading-relaxed">
               An enterprise-grade full-stack orchestration layout mapped against decentralized bio-metrics and real-time ledger auditing. Built for corporate environmental impact tracking.
             </p>
@@ -280,9 +379,7 @@ function App() {
         </div>
       )}
 
-      {/* ==========================================
-          PAGE 2: CENTRAL ANALYTICS DASHBOARD
-          ========================================== */}
+      {/* VIEW: WORKSPACE DASHBOARD */}
       {currentTab === 'dashboard' && (
         <main className="flex-grow p-4 sm:p-8 max-w-7xl mx-auto w-full space-y-8 animate-fade-in">
           <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -371,9 +468,7 @@ function App() {
         </main>
       )}
 
-      {/* ==========================================
-          PAGE 3: DATABASE LEDGER ARCHIVES
-          ========================================== */}
+      {/* VIEW: DATABASE LEDGER ARCHIVES */}
       {currentTab === 'ledger' && (
         <main className="flex-grow p-4 sm:p-8 max-w-7xl mx-auto w-full space-y-6 animate-fade-in">
           <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-md flex flex-col sm:flex-row justify-between items-center gap-4">
@@ -460,7 +555,7 @@ function App() {
                   <input type="number" value={formData.height} onChange={e => setFormData({ ...formData, height: e.target.value })} className="w-full p-3 border rounded-xl" required />
                 </div>
                 <div>
-                  <label className="block text-gray-400 mb-1 uppercase text-[9px]">Weight (kg)</label>
+                  <label className="block text-gray-400 mb-1 uppercase text-[9px]">Mass (kg)</label>
                   <input type="number" value={formData.weight} onChange={e => setFormData({ ...formData, weight: e.target.value })} className="w-full p-3 border rounded-xl" required />
                 </div>
               </div>
