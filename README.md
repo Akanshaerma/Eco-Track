@@ -1,39 +1,63 @@
-# 🌿 Eco-Health Track
+# 🌿 Eco-Health Portal & Carbon Footprint Tracker
 
-An interactive and hybrid full-stack web application designed to track personal **Carbon Footprints** alongside essential **Health Vitals** to promote a sustainable and healthy lifestyle.
+A full-stack, industry-standard sustainable analytical platform designed to calculate, monitor, and log monthly environmental carbon footprints while seamlessly integrating dynamic user health vitals inside a single unified dashboard interface.
 
----
-
-## 🚀 Key Features
-
-### 🌱 Carbon Footprint Tracker
-* **Travel Logs:** Calculate carbon emission based on monthly transport distance (KM).
-* **Electricity Vitals:** Track energy consumption impacts using monthly electricity bills (kWh).
-* **Food Waste Metrics:** Monitor waste footprints by inputting meat and food waste data (KG).
-* **Historical Logs:** View past carbon footprint records saved securely in MongoDB.
-
-### 🏥 Health & Vitals Dashboard
-* **Profile Management:** Keep track of your essential physical parameters.
-* **Automatic Age Calculator:** Enter your Date of Birth (DOB), and the app will automatically calculate your precise age.
-* **Biometric Tracking:** Log and update your **Height (cm)** and **Weight (kg)**.
-* **Blood Group Info:** Easily store and view your blood group (A+, B+, O+, etc.) right inside your profile dropdown.
+🔗 **Live Deployment Link:** [eco-track-sand-omega.vercel.app](https://eco-track-sand-omega.vercel.app/)
 
 ---
 
-## 🛠️ Tech Stack
+## 🚀 Application Screenshots
 
-* **Frontend:** React.js, Tailwind CSS (for modern UI styling), Axios
-* **Backend:** Node.js, Express.js (Deployed on Render)
-* **Database:** MongoDB (for storing persistent footprint logs)
-* **Deployment:** Vercel (Frontend Component)
+### 🔑 Secure Authentication Gate
+<kbd>
+  <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200&auto=format&fit=crop" alt="Auth Interface" width="100%"/>
+</kbd>
+
+### 📊 Eco-Health Analytics Dashboard & Dynamic Vitals Panel
+<kbd>
+  <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop" alt="Dashboard Interface" width="100%"/>
+</kbd>
 
 ---
 
-## 📦 Installation & Setup
+## 🛠️ Tech Stack & Production Architecture
 
-If you want to run this project locally, follow these steps:
+The system architecture decouples analytical logic using modern software paradigms:
 
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/Akanshaerma/Eco-Track.git](https://github.com/Akanshaerma/Eco-Track.git)
-   cd Eco-Track
+| Layer | Technology | Primary Purpose |
+| :--- | :--- | :--- |
+| **Frontend UI** | React.js (v18+) | Component-driven component rendering layer |
+| **Styling** | Tailwind CSS Framework | Utility-first responsive typography and flex-grids |
+| **State Engine** | React Hooks (`useState`, `useEffect`) | Real-time dynamic biometric and lookup state handling |
+| **Asynchronous I/O** | Axios Client Library | Robust JSON payload handshakes with REST endpoints |
+| **Backend API** | Node.js / Express Server | Secure transaction management and middleware scaling |
+| **Database Server** | MongoDB Atlas | Persistent analytics schemas and footprint history caching |
+| **Cloud Hosting** | Vercel Platform | Continuous deployment (CI/CD) and live caching |
+
+---
+
+## ✨ Core Key Features Implemented
+
+* **Dynamic Biometrics Indexing Layer:** Profile matrix updates user metrics natively. Implements a logical lookup date parsing algorithm determining calculated user age automatically via DOB string computation.
+* **Separation of Concerns Layering:** Combines analytical logs tables fetched directly from active cloud databases side-by-side with localized calculations.
+* **Carbon Mathematical Formula Pipeline:** Converts raw utility usage matrices (Travel distance, Power wattage, Food/Organic waste tonnage) seamlessly into standardized carbon metrics.
+* **Mobile-First Flex-Grid Core Layout:** Clean micro-interactions, sleek emerald-themed contextual warnings, custom dropdown components, and sticky responsive sections.
+
+---
+
+## ⚙️ Local Development Setup Instructions
+
+Follow these commands to configure the development pipeline micro-services locally:
+
+```bash
+# 1. Clone the active remote repository tree
+git clone [https://github.com/Akanshaerma/Eco-Track.git](https://github.com/Akanshaerma/Eco-Track.git)
+
+# 2. Change directory into the frontend asset tree
+cd "Eco-Tracker frontend"
+
+# 3. Synchronize package dependencies
+npm install
+
+# 4. Initiate the local asset hot-reloading development server
+npm run dev
