@@ -83,15 +83,23 @@ const LocalHeader = ({ currentTab, setCurrentTab, userProfile, onOpenEditModal, 
 const LocalFooter = () => (
   <footer className="w-full bg-gray-950 text-gray-500 py-6 px-6 text-xs border-t border-gray-900 font-mono text-center mt-auto">
     <p className="font-bold text-gray-400 tracking-wide">🔬 Industrial Full-Stack Sustainability Analytics Framework v6.0.0</p>
-    <p className="text-gray-600 text-[10px] mt-1">Universal Sandbox Access Engine Engaged. © 2026.</p>
+    <p className="text-gray-600 text-[10px] mt-1">Universal Access Core Registered. © 2026.</p>
   </footer>
 );
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authMode, setAuthMode] = useState('login'); // 'login' or 'register'
+  
+  // Form State Streams
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
-  
+  const [regName, setRegName] = useState('');
+  const [regDob, setRegDob] = useState('2005-08-20');
+  const [regBlood, setRegBlood] = useState('B+');
+  const [regHeight, setRegHeight] = useState('152.4');
+  const [regWeight, setRegWeight] = useState('40');
+
   const [currentTab, setCurrentTab] = useState('landing');
   const [isLoading, setIsLoading] = useState(false);
   const [filterThreshold, setFilterThreshold] = useState('0');
@@ -126,9 +134,9 @@ function App() {
     }
   }, [logs, user, isAuthenticated]);
 
+  // LOGIN FLOW TRIGGER
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    // Universal Pass Gateway Matrix
     if (authEmail.trim().length > 3 && authPassword.length >= 4) {
       const extractedName = authEmail.split('@')[0];
       const formattedName = extractedName.charAt(0).toUpperCase() + extractedName.slice(1);
@@ -143,10 +151,36 @@ function App() {
     }
   };
 
+  // DYNAMIC REGISTRATION AND AUTO LOGIN PIPELINE
+  const handleRegisterSubmit = (e) => {
+    e.preventDefault();
+    if (!authEmail || !authPassword || !regName) return;
+
+    // Compute exact age proxy
+    const computedAge = (new Date().getFullYear() - new Date(regDob).getFullYear()).toString();
+
+    // 1. Commit metrics dynamically inside user profile memory layout
+    setUser({
+      name: regName,
+      email: authEmail.trim(),
+      dob: regDob,
+      age: computedAge || "21",
+      height: regHeight,
+      weight: regWeight,
+      bloodGroup: regBlood
+    });
+
+    // 2. TRIGGER INSTANT AUTOMATIC AUTHENTICATION (No manual login prompt required)
+    setIsAuthenticated(true);
+    setCurrentTab('landing');
+  };
+
   const handleLogout = () => {
     setIsAuthenticated(false);
     setAuthEmail('');
     setAuthPassword('');
+    setRegName('');
+    setAuthMode('login');
     setCurrentTab('landing');
   };
 
@@ -255,53 +289,147 @@ function App() {
   const filteredLogs = logs.filter(log => parseFloat(log.totalCarbon) >= parseFloat(filterThreshold));
 
   // ==========================================
-  // VIEW: CENTRAL GATEKEEPER LOGIN PORTAL
+  // VIEW: AUTH MATRIX LAYOUT (LOGIN & REGISTER)
   // ==========================================
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-slate-900 flex flex-col justify-center items-center p-6 text-slate-100 font-sans selection:bg-emerald-800">
-        <div className="max-w-md w-full bg-slate-800 rounded-3xl p-8 border border-slate-700/60 shadow-2xl space-y-6">
-          <div className="text-center space-y-2">
+      <div className="min-h-screen bg-slate-900 flex flex-col justify-center items-center p-4 text-slate-100 font-sans selection:bg-emerald-800">
+        <div className="max-w-md w-full bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-700/60 shadow-2xl space-y-5">
+          
+          <div className="text-center space-y-1.5">
             <span className="text-3xl">⚙️</span>
             <h2 className="text-xl font-black uppercase tracking-wider text-emerald-400">System Core Gateway</h2>
-            <p className="text-xs font-mono text-slate-400">Initialize Encrypted Full-Stack Management Nodes</p>
+            <p className="text-xs font-mono text-slate-400">
+              {authMode === 'login' ? 'Initialize Encrypted Full-Stack Core Node' : 'Register New Biometric Profile Infrastructure'}
+            </p>
           </div>
 
-          <form onSubmit={handleLoginSubmit} className="space-y-4 text-xs font-mono">
-            <div>
-              <label className="block text-slate-400 mb-1.5 uppercase text-[9px] tracking-wider">Access Node Link (Email)</label>
-              <input
-                type="email"
-                placeholder="Enter any email address..."
-                value={authEmail}
-                onChange={e => setAuthEmail(e.target.value)}
-                className="w-full p-3.5 bg-slate-950/60 border border-slate-700 rounded-xl text-slate-200 focus:outline-none focus:border-emerald-500 transition"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-slate-400 mb-1.5 uppercase text-[9px] tracking-wider">Secret Security Key (Password)</label>
-              <input
-                type="password"
-                placeholder="Enter any password (min 4 chars)..."
-                value={authPassword}
-                onChange={e => setAuthPassword(e.target.value)}
-                className="w-full p-3.5 bg-slate-950/60 border border-slate-700 rounded-xl text-slate-200 focus:outline-none focus:border-emerald-500 transition"
-                required
-              />
-            </div>
+          {/* DUAL MODE SELECTOR BUTTONS */}
+          <div className="grid grid-cols-2 bg-slate-950/80 p-1 rounded-xl border border-slate-700/50 font-mono text-xs">
+            <button 
+              type="button" 
+              onClick={() => setAuthMode('login')} 
+              className={`py-2 rounded-lg font-bold transition-all ${authMode === 'login' ? 'bg-emerald-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'}`}
+            >
+              Secure Login
+            </button>
+            <button 
+              type="button" 
+              onClick={() => setAuthMode('register')} 
+              className={`py-2 rounded-lg font-bold transition-all ${authMode === 'register' ? 'bg-emerald-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'}`}
+            >
+              New Registration
+            </button>
+          </div>
 
-            <div className="pt-2">
-              <button
-                type="submit"
-                className="w-full p-4 bg-emerald-600 hover:bg-emerald-500 font-bold uppercase text-xs tracking-wider rounded-xl text-white shadow-xl shadow-emerald-950/30 transition"
-              >
-                Initialize System Kernel →
-              </button>
-            </div>
-          </form>
+          {/* MODE A: LOGIN SCREEN PANEL */}
+          {authMode === 'login' ? (
+            <form onSubmit={handleLoginSubmit} className="space-y-4 text-xs font-mono">
+              <div>
+                <label className="block text-slate-400 mb-1 uppercase text-[9px] tracking-wider">Access Node Link (Email)</label>
+                <input
+                  type="email"
+                  placeholder="Enter any email address..."
+                  value={authEmail}
+                  onChange={e => setAuthEmail(e.target.value)}
+                  className="w-full p-3.5 bg-slate-950/60 border border-slate-700 rounded-xl text-slate-200 focus:outline-none focus:border-emerald-500 transition"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-slate-400 mb-1 uppercase text-[9px] tracking-wider">Secret Security Key (Password)</label>
+                <input
+                  type="password"
+                  placeholder="Enter any password (min 4 chars)..."
+                  value={authPassword}
+                  onChange={e => setAuthPassword(e.target.value)}
+                  className="w-full p-3.5 bg-slate-950/60 border border-slate-700 rounded-xl text-slate-200 focus:outline-none focus:border-emerald-500 transition"
+                  required
+                />
+              </div>
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  className="w-full p-4 bg-emerald-600 hover:bg-emerald-500 font-bold uppercase text-xs tracking-wider rounded-xl text-white shadow-xl transition"
+                >
+                  Initialize System Kernel →
+                </button>
+              </div>
+            </form>
+          ) : (
+            /* MODE B: REGISTRATION GRID PANEL (AUTO LOGIN CAPABLE) */
+            <form onSubmit={handleRegisterSubmit} className="space-y-3.5 text-xs font-mono">
+              <div>
+                <label className="block text-slate-400 mb-1 uppercase text-[9px] tracking-wider">Full Core Identity (Name)</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Ashu Verma"
+                  value={regName}
+                  onChange={e => setRegName(e.target.value)}
+                  className="w-full p-3 bg-slate-950/60 border border-slate-700 rounded-xl text-slate-200 focus:outline-none focus:border-emerald-500 transition"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-400 mb-1 uppercase text-[9px] tracking-wider">Network Link (Email)</label>
+                  <input
+                    type="email"
+                    placeholder="name@domain.com"
+                    value={authEmail}
+                    onChange={e => setAuthEmail(e.target.value)}
+                    className="w-full p-3 bg-slate-950/60 border border-slate-700 rounded-xl text-slate-200 focus:outline-none focus:border-emerald-500 transition"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-400 mb-1 uppercase text-[9px] tracking-wider">Secure Access Token (Password)</label>
+                  <input
+                    type="password"
+                    placeholder="Min 4 characters"
+                    value={authPassword}
+                    onChange={e => setAuthPassword(e.target.value)}
+                    className="w-full p-3 bg-slate-950/60 border border-slate-700 rounded-xl text-slate-200 focus:outline-none focus:border-emerald-500 transition"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* INTEGRATED BIOMETRIC SETUP FOR WHO MATRIX DISCOVERY */}
+              <div className="p-3 bg-slate-900/60 rounded-xl border border-slate-700/40 space-y-2">
+                <span className="text-[10px] uppercase font-bold text-emerald-400 block tracking-wide">🔬 Default Biometric Parameters Pipeline</span>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-slate-500 mb-1 uppercase text-[8px]">Date of Birth</label>
+                    <input type="date" value={regDob} onChange={e => setRegDob(e.target.value)} className="w-full p-2 bg-slate-950 border border-slate-700 rounded-lg text-slate-300 text-[11px]" required />
+                  </div>
+                  <div>
+                    <label className="block text-slate-500 mb-1 uppercase text-[8px]">Blood Matrix</label>
+                    <input type="text" value={regBlood} onChange={e => setRegBlood(e.target.value)} className="w-full p-2 bg-slate-950 border border-slate-700 rounded-lg text-slate-300 text-[11px]" required />
+                  </div>
+                  <div>
+                    <label className="block text-slate-500 mb-1 uppercase text-[8px]">Stature (cm)</label>
+                    <input type="number" value={regHeight} onChange={e => setRegHeight(e.target.value)} className="w-full p-2 bg-slate-950 border border-slate-700 rounded-lg text-slate-300 text-[11px]" required />
+                  </div>
+                  <div>
+                    <label className="block text-slate-500 mb-1 uppercase text-[8px]">Mass Index (kg)</label>
+                    <input type="number" value={regWeight} onChange={e => setRegWeight(e.target.value)} className="w-full p-2 bg-slate-950 border border-slate-700 rounded-lg text-slate-300 text-[11px]" required />
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-1.5">
+                <button
+                  type="submit"
+                  className="w-full p-3.5 bg-emerald-600 hover:bg-emerald-500 font-bold uppercase text-xs tracking-wider rounded-xl text-white shadow-xl transition animate-pulse"
+                >
+                  Register Profile & Auto-Login →
+                </button>
+              </div>
+            </form>
+          )}
         </div>
-        <p className="mt-6 text-[10px] font-mono text-slate-600">Secure Protocol Management. Powered by MongoDB Cloud Instances.</p>
+        <p className="mt-5 text-[10px] font-mono text-slate-600">Secure Protocol Management. Powered by MongoDB Cloud Instances.</p>
       </div>
     );
   }
@@ -313,7 +441,7 @@ function App() {
     <div className="min-h-screen flex flex-col bg-slate-50/50 text-gray-800 font-sans selection:bg-emerald-100 relative">
       
       {isLoading && (
-        <div className="fixed top-4 right-4 bg-gray-900 text-white font-mono text-[11px] px-4 py-2.5 rounded-xl shadow-2xl z-50 flex items-center space-x-2 border border-gray-800 animate-pulse">
+        <div className="fixed top-4 right-4 bg-gray-900 text-white font-mono text-[11px] px-4 py-2.5 rounded-xl shadow-2xl z-50 flex items-center space-x-2 border border-gray-800">
           <span className="text-emerald-400">🔄</span>
           <span>MongoDB Cloud Sync Active...</span>
         </div>
@@ -463,7 +591,7 @@ function App() {
 
       {/* VIEW: DATABASE LEDGER ARCHIVES */}
       {currentTab === 'ledger' && (
-        <main className="flex-grow p-4 sm:p-8 max-w-7xl mx-auto w-full space-y-6 animate-fade-in">
+        <main className="flex-grow p-4 sm:p-8 max-w-7xl mx-auto w-full space-y-6 navigate-fade-in">
           <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-md flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
               <h2 className="text-lg font-black text-gray-900 uppercase">📜 Enterprise Storage Archives</h2>
@@ -527,7 +655,7 @@ function App() {
               <span>⚙️ Calibrate Bio-Metrics</span>
               <button type="button" onClick={() => setIsModalOpen(false)} className="text-base font-black">✕</button>
             </div>
-            <form onSubmit={(e) => { e.preventDefault(); setUser({ ...formData, age: (new Date().getFullYear() - new Date(formData.dob).getFullYear()).toString() }); setIsModalOpen(true); }} className="p-6 space-y-4">
+            <form onSubmit={(e) => { e.preventDefault(); setUser({ ...formData, age: (new Date().getFullYear() - new Date(formData.dob).getFullYear()).toString() }); setIsModalOpen(false); }} className="p-6 space-y-4">
               <div>
                 <label className="block text-gray-400 mb-1 uppercase text-[9px]">Subject Node Name</label>
                 <input type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full p-3 border rounded-xl" required />
