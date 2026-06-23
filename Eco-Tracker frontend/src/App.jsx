@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+// 💡 Tumhara live Render backend URL
+const API_BASE_URL = 'https://eco-track-3-u27a.onrender.com';
+
 function App() {
   // Authentication States
   const [isLogin, setIsLogin] = useState(true);
@@ -32,7 +35,7 @@ function App() {
   // Function to fetch history from backend
   const fetchHistory = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/footprint');
+      const res = await axios.get(`${API_BASE_URL}/api/footprint`);
       setHistory(res.data);
     } catch (error) {
       console.error("Error fetching history", error);
@@ -45,8 +48,8 @@ function App() {
     setAuthMessage('');
     
     const endpoint = isLogin 
-      ? 'http://localhost:5000/api/auth/login' 
-      : 'http://localhost:5000/api/auth/register';
+      ? `${API_BASE_URL}/api/auth/login` 
+      : `${API_BASE_URL}/api/auth/register`;
       
     const payload = isLogin ? { email, password } : { name, email, password };
 
@@ -80,7 +83,7 @@ function App() {
     const finalResult = totalCarbon.toFixed(2);
 
     try {
-      await axios.post('http://localhost:5000/api/footprint', 
+      await axios.post(`${API_BASE_URL}/api/footprint`, 
         { transport, electricity, food, totalFootprint: finalResult }
       );
       
@@ -204,7 +207,7 @@ function App() {
                       <th className="p-3">Travel (KM)</th>
                       <th className="p-3">Electricity (kWh)</th>
                       <th className="p-3">Food (KG)</th>
-                      <th className="p-3 rounded-r-lg">Total Carbon ($CO_2$)</th>
+                      <th className="p-3 rounded-r-lg">Total Carbon (CO2)</th>
                     </tr>
                   </thead>
                   <tbody className="text-sm divide-y divide-gray-100">
